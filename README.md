@@ -1,8 +1,8 @@
 # grunticon - highres style! 
 
-Standard grunticon outputs fallback PNG icons in 1x pixel ratio which is perfectly fine for most sites since modern browsers will use the SVG version. This modification enables you to generate different sizes of the icons and can for instance serve 1.5x icons to older Android devices (older than version 3). You can specify which formats you want to use in the `pngpixelratio` variable. (For instance `[1,1.5,2]`).
+Standard grunticon uses fallback PNG icons in 1x pixel ratio which is perfectly fine for most sites since modern browsers will use the SVG version. This modification enables you to generate different sizes of the icons and you can for instance serve 1.5x icons to older Android devices (older than version 3). You can specify which formats you want to use in the `pngpixelratio` variable. (For instance `[1,1.5,2]`).
 
-It can also be used as an build task to generate assets if you have a project that do not use SVG.
+It can also be used as an build task to generate PNG assets if you have a project that do not use SVG.
 
 Please not that there is some complexity added in the script that serves the CSS files.
 
