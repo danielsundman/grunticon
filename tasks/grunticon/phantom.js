@@ -138,7 +138,7 @@ function processFile(){
 				var height = svgelem.getAttribute( "height" );				
 
 				// get base64 of svg file
-				svgdatauri += btoa(svgdata);
+				svgdatauri += btoa(unescape(encodeURIComponent( svgdata )));
 
 				// add rules to svg data css file
 				datacssrules.push( "." + cssprefix + filenamenoext + " { background-image: url(" + svgdatauri + "); background-repeat: no-repeat; }" );
