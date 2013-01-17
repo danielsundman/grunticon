@@ -9,6 +9,7 @@
 /*global phantom:true*/
 /*global window:true*/
 /*global btoa:true*/
+/*global unescape:true*/
 
 /*
 phantom args sent from grunticon.js:
