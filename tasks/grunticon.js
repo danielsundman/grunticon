@@ -9,6 +9,8 @@
 	"use strict";
 module.exports = function(grunt ) {
 
+	var uglify = require("uglify-js");
+
 	grunt.registerTask( 'grunticon', 'A mystical CSS icon solution.', function() {
 
 		// just a quick starting message
@@ -19,7 +21,7 @@ module.exports = function(grunt ) {
 
 		// fail if config or no src or dest config
 		if( !config || config.src === undefined || config.dest === undefined ){
-			grunt.fatal( "Oops! Please provide grunticon configuration for src and dest in your grunt.js file" );
+			grunt.fatal( "Oops! Please provide grunticon configuration for src and dest in your Gruntfile.js file" );
 			return;
 		}
 
@@ -31,9 +33,9 @@ module.exports = function(grunt ) {
 				config.dest += "/";
 		}
 
-		var asyncCSS = grunt.task.getFile( "grunticon/static/grunticon.loader.js" );
-		var asyncCSSBanner = grunt.task.getFile( "grunticon/static/grunticon.loader.banner.js" );
-		var previewHTMLsrc = grunt.task.getFile( "grunticon/static/preview.html" );
+		var asyncCSS = __dirname + "/grunticon/static/grunticon.loader.js";
+		var asyncCSSBanner = __dirname + "/grunticon/static/grunticon.loader.banner.js";
+		var previewHTMLsrc = __dirname + "/grunticon/static/preview.html";
 
 		// CSS filenames with optional mixin from config
 		var datasvgcss = config.datasvgcss || "icons.data.svg.css";
@@ -70,9 +72,9 @@ module.exports = function(grunt ) {
 
 		// minify the source of the grunticon loader and write that to the output
 		grunt.log.write( "\ngrunticon now minifying the stylesheet loader source." );
-		var asyncsrc = grunt.file.read( asyncCSS );
 		var banner = grunt.file.read( asyncCSSBanner );
-		var min = banner + "\n" + grunt.helper('uglify', asyncsrc );
+        var asyncsrcMinified = uglify.minify( asyncCSS );
+		var min = banner + "\n" + asyncsrcMinified.code;
 		var loaderCodeDest = config.dest + loadersnippet;
 		grunt.file.write( loaderCodeDest, min );
 		grunt.log.write( "\ngrunticon loader file created." );
@@ -80,10 +82,12 @@ module.exports = function(grunt ) {
 		// take it to phantomjs to do the rest
 		grunt.log.write( "\ngrunticon now spawning phantomjs..." );
 
-		grunt.utils.spawn({
-			cmd: 'phantomjs',
+		var binPath = require('phantomjs').path;
+
+		grunt.util.spawn({
+			cmd: binPath,
 			args: [
-				grunt.task.getFile('grunticon/phantom.js'),
+				__dirname + '/grunticon/phantom.js',
 				config.src,
 				config.dest,
 				loaderCodeDest,
@@ -99,7 +103,7 @@ module.exports = function(grunt ) {
 			],
 			fallback: ''
 		}, function(err, result, code) {
-			grunt.log.write("\nSomething went wrong with phantomjs... ");			
+			grunt.log.write("\nSomething went wrong with phantomjs... ");
 		});
 	});
 };

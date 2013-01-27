@@ -9,13 +9,9 @@ module.exports = function(grunt) {
 		test: {
 			files: ['test/**/*.js']
 		},
-		lint: {
-			files: ['grunt.js', 'tasks/**/*.js', 'test/**/*.js']
-		},
 		watch: {
-			files: '<config:lint.files>',
+			files: ['Gruntfile.js', 'tasks/**/*.js', 'test/**/*.js'],
 			tasks: 'default'
-
 		},
 		grunticon: {
 			// required config
@@ -49,6 +45,7 @@ module.exports = function(grunt) {
 			cssbasepath: "/"
 		},
 		jshint: {
+			all: ['Gruntfile.js', 'tasks/**/*.js', 'test/**/*.js'],
 			options: {
 				curly: true,
 				eqeqeq: true,
@@ -61,11 +58,11 @@ module.exports = function(grunt) {
 				boss: true,
 				eqnull: true,
 				node: true,
-				es5: true
-			},
-			globals: {
-				Image: true,
-				window: true
+				es5: true,
+				globals: {
+					Image: true,
+					window: true
+				}
 			}
 		}
 	});
@@ -73,8 +70,11 @@ module.exports = function(grunt) {
 	// Load local tasks.
 	grunt.loadTasks('tasks');
 
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+
 	// Default task.
-	grunt.registerTask('default', 'lint grunticon');
+	grunt.registerTask('default', ['jshint', 'grunticon']);
 
 };
 })();
