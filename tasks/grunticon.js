@@ -80,12 +80,11 @@ module.exports = function(grunt ) {
 		grunt.log.write( "\ngrunticon loader file created." );
 
 		// take it to phantomjs to do the rest
-		grunt.log.write( "\ngrunticon now spawning phantomjs..." );
+		grunt.log.write( "\ngrunticon now spawning phantomjs." );
 
-		var binPath = require('phantomjs').path;
-
+		var done = this.async();
 		grunt.util.spawn({
-			cmd: binPath,
+			cmd: require('phantomjs').path,
 			args: [
 				__dirname + '/grunticon/phantom.js',
 				config.src,
@@ -102,9 +101,21 @@ module.exports = function(grunt ) {
 				pngpixelratio
 			],
 			fallback: ''
-		}, function(err, result, code) {
-			grunt.log.write("\nSomething went wrong with phantomjs... ");
+		}, function(err) {
+			if (err) {
+				grunt.log.write("\nSomething went wrong with phantomjs...\n" + err);
+				return done();
+			}
+			grunt.log.write("OK!");
+			return done();
 		});
+
+		var progress = function() {
+			grunt.log.write(".");
+			setTimeout(progress, 1000);
+		};
+		progress();
+
 	});
 };
 })();
