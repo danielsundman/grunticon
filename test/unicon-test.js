@@ -27,10 +27,11 @@ exports['grunticon'] = {
     // setup here
     done();
   },
-  'helper': function(test) {
-    test.expect(1);
+  'grunticon': function(test) {
+    var grunticon = require('../tasks/grunticon');
+	test.expect(1);
     // tests here
-    test.equal(grunt.helper('grunticon'), 'grunticon!!!', 'should return the correct value.');
+    test.ok(grunticon);
     test.done();
   }
 };
